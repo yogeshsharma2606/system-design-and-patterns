@@ -1,84 +1,151 @@
-# System Design And Patterns Interview Guide
+# System Design & Patterns Interview Guide
 
-This guide is built for interview preparation, not textbook reading. The goal is to help you explain concepts clearly, apply them to real systems, discuss tradeoffs, and handle follow-up questions.
+An **interview-prep-depth** curriculum for system design, design patterns, and SOLID principles. Every concept is grounded in real-world examples, tradeoffs, and interview-ready phrases.
 
-## How To Study
+**Estimated study time:** ~20 hours over 2-3 weeks.
 
-Use this order if you have limited time:
+Every module follows the same template: **TL;DR → Concept (with daily-life analogy) → How It Really Works → Why/When/Trade-offs → Worked Scenario → Gotchas → Interview Q&A → Further Reading**.
 
-1. Start with `system-design/00-interview-approach.md`.
-2. Study one system design building block at a time.
-3. Revise the design patterns before low-level design rounds.
-4. Revise SOLID before object-oriented design and refactoring questions.
-5. Use the revision folder for quick checks before interviews.
+---
 
-## 7-Day Revision Plan
+## Prerequisites
 
-Day 1: Interview approach, requirements clarification, API design, capacity thinking.
+You should be comfortable with:
 
-Day 2: Load balancing, API gateways, rate limiting, circuit breakers.
+- Basic distributed-systems vocabulary (nodes, replication, leader/follower).
+- HTTP APIs and REST conventions.
+- Reading and writing SQL queries.
+- Object-oriented programming basics.
 
-Day 3: Caching, CDN, database scaling, consistency and availability.
+You do **not** need a running cluster or cloud account to study this material.
 
-Day 4: Queues, async workflows, observability, security.
+---
 
-Day 5: Creational and structural design patterns.
+## The Mental Model in One Line
 
-Day 6: Behavioral patterns and SOLID principles.
+> Scale **reads** with cache and CDN, scale **writes** with queues and sharding, **protect** with gateway and rate limits, and **observe** everything with logs, metrics, and traces.
 
-Day 7: Mock prompts, follow-up questions, and cheatsheet revision.
+```mermaid
+flowchart LR
+    client["Client"] --> cdn["CDN"]
+    cdn --> lb["Load Balancer"]
+    lb --> gw["API Gateway"]
+    gw --> svc["App Services"]
+    svc --> cache["Cache"]
+    svc --> db["Database"]
+    svc --> queue["Queue"]
+    queue --> workers["Workers"]
+    svc --> obs["Observability"]
+```
 
-## Interview Answering Structure
+---
 
-For system design, use this sequence:
+## Curriculum (16 modules)
 
-1. Clarify functional and non-functional requirements.
-2. Estimate scale only enough to justify design choices.
-3. Define APIs and data model.
-4. Draw a high-level architecture in words.
-5. Deep dive into bottlenecks, scaling, consistency, and failures.
-6. Close with observability, security, and tradeoffs.
+### Foundation
 
-For design patterns and SOLID, use this sequence:
+| # | Module | Topics |
+|---|--------|--------|
+| 0 | [Interview Approach](modules/00-interview-approach.md) | Requirements, scale, APIs, data model, architecture flow |
+| 1 | [Load Balancer](modules/01-load-balancer.md) | L4 vs L7, algorithms, health checks, sticky sessions |
+| 2 | [API Gateway](modules/02-api-gateway.md) | Routing, aggregation, auth at edge, versioning |
+| 3 | [Caching](modules/03-caching.md) | Cache-aside, write-through, TTL, stampede, hot keys |
+| 4 | [Rate Limiting](modules/04-rate-limiting.md) | Token bucket, distributed limiter, 429 responses |
 
-1. State the problem.
-2. Name the pattern or principle.
-3. Explain why it fits.
-4. Show a small example.
-5. Mention one tradeoff or common mistake.
+### Platform
 
-## Contents
+| # | Module | Topics |
+|---|--------|--------|
+| 5 | [Circuit Breaker](modules/05-circuit-breaker.md) | States, fallbacks, vs retries |
+| 6 | [Message Queues](modules/06-message-queues.md) | Queue vs stream, delivery semantics, idempotency, DLQ |
+| 7 | [Database Scaling](modules/07-database-scaling.md) | Indexes, replicas, partitioning, sharding |
+| 8 | [Consistency & Availability](modules/08-consistency-availability.md) | CAP, strong vs eventual, quorum, read-your-writes |
 
-### System Design
+### Production & Design
 
-- `system-design/00-interview-approach.md`
-- `system-design/01-load-balancer.md`
-- `system-design/02-api-gateway.md`
-- `system-design/03-caching.md`
-- `system-design/04-rate-limiting.md`
-- `system-design/05-circuit-breaker.md`
-- `system-design/06-message-queues.md`
-- `system-design/07-database-scaling.md`
-- `system-design/08-consistency-availability.md`
-- `system-design/09-observability.md`
-- `system-design/10-security.md`
-- `system-design/11-common-system-design-patterns.md`
+| # | Module | Topics |
+|---|--------|--------|
+| 9 | [Observability](modules/09-observability.md) | Logs, metrics, traces, SLI/SLO/SLA |
+| 10 | [Security](modules/10-security.md) | Auth, authorization, encryption, secrets |
+| 11 | [System Design Patterns](modules/11-common-system-design-patterns.md) | Backpressure, retries, bulkheads, idempotency |
+| 12 | [Creational Patterns](modules/12-creational-patterns.md) | Singleton, Factory, Builder, Prototype |
+| 13 | [Structural Patterns](modules/13-structural-patterns.md) | Adapter, Decorator, Facade, Proxy, Composite |
+| 14 | [Behavioral Patterns](modules/14-behavioral-patterns.md) | Strategy, Observer, Command, State, Chain |
+| 15 | [SOLID Principles](modules/15-solid-principles.md) | SRP, OCP, LSP, ISP, DIP with examples |
 
-### Design Patterns
+---
 
-- `design-patterns/creational-patterns.md`
-- `design-patterns/structural-patterns.md`
-- `design-patterns/behavioral-patterns.md`
+## Concept Library
 
-### SOLID
+A granular, per-topic reference lives in [`overview-concepts/`](overview-concepts/). Each folder has a `README.md` index and short focused files. Use it when you want a single concept explained quickly rather than a full module.
 
-- `solid-principles/solid-with-examples.md`
+| Folder | Focus |
+|--------|-------|
+| [00-interview-fundamentals](overview-concepts/00-interview-fundamentals/) | Requirements, scale, APIs, data modeling |
+| [01-load-balancing](overview-concepts/01-load-balancing/) | L4/L7, algorithms, health checks, sticky sessions |
+| [02-api-gateway](overview-concepts/02-api-gateway/) | Routing, aggregation, auth, versioning |
+| [03-caching](overview-concepts/03-caching/) | Cache patterns, TTL, stampede, hot keys |
+| [04-rate-limiting](overview-concepts/04-rate-limiting/) | Algorithms, distributed limiter |
+| [05-circuit-breaker](overview-concepts/05-circuit-breaker/) | States, fallbacks, vs retries |
+| [06-message-queues](overview-concepts/06-message-queues/) | Queue vs stream, delivery, DLQ |
+| [07-database-scaling](overview-concepts/07-database-scaling/) | Indexes, replicas, sharding |
+| [08-consistency-availability](overview-concepts/08-consistency-availability/) | CAP, consistency models, quorum |
+| [09-observability](overview-concepts/09-observability/) | Logs, metrics, traces, SLO |
+| [10-security](overview-concepts/10-security/) | Auth, encryption, secrets |
+| [11-system-design-patterns](overview-concepts/11-system-design-patterns/) | Backpressure, bulkheads, idempotency |
+| [12-design-patterns](overview-concepts/12-design-patterns/) | All GoF patterns, one per file |
+| [13-solid](overview-concepts/13-solid/) | Each SOLID principle |
+| [14-interview](overview-concepts/14-interview/) | Opening flow, phrases, red flags |
 
-### Revision
+---
 
-- `revision/interview-cheatsheet.md`
-- `revision/common-follow-up-questions.md`
-- `revision/mock-system-design-prompts.md`
+## Cheatsheets
+
+- [Interview cheatsheet](cheatsheets/interview-cheatsheet.md) — opening flow, when-to-use-what, strong phrases.
+- [Common follow-up questions](cheatsheets/common-follow-up-questions.md) — Q&A by topic.
+- [Mock system design prompts](cheatsheets/mock-system-design-prompts.md) — 8 practice prompts with scoring checklist.
+
+---
+
+## Suggested Schedule
+
+| Week | Modules | Focus | Hours |
+|------|---------|-------|-------|
+| 1 | 0-4 | Interview approach, LB, gateway, cache, rate limiting | ~6 |
+| 2 | 5-8 | Circuit breaker, queues, DB scaling, consistency | ~6 |
+| 3 | 9-11 | Observability, security, system design patterns | ~4 |
+| 4 | 12-15 + cheatsheets | Design patterns, SOLID, mock prompts, review | ~4 |
+
+### 7-Day Crash Course
+
+**Day 1:** Interview approach, requirements, APIs, capacity thinking.
+
+**Day 2:** Load balancing, API gateways, rate limiting, circuit breakers.
+
+**Day 3:** Caching, database scaling, consistency and availability.
+
+**Day 4:** Queues, observability, security.
+
+**Day 5:** Creational and structural design patterns.
+
+**Day 6:** Behavioral patterns and SOLID principles.
+
+**Day 7:** Mock prompts, follow-up questions, and cheatsheet revision.
+
+---
+
+## How Each Module Is Structured
+
+1. **TL;DR** — the mental model in a few lines.
+2. **Concept** — plain-language explanation with a daily-life analogy.
+3. **How It Really Works** — internals with diagrams.
+4. **Why / When / Trade-offs** — senior decision-making.
+5. **Worked Scenario** — a realistic situation end-to-end.
+6. **Gotchas & Failure Modes** — what bites people.
+7. **Interview Q&A** — sharp answers and follow-ups.
+8. **Further Reading** — links to concept library and cheatsheets.
+
+---
 
 ## Quick Interview Checklist
 
